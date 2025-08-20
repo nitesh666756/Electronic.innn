@@ -1,120 +1,193 @@
 // import React, { useEffect, useState } from "react";
 // import Navbar from "../component/Navbar";
-// import Footer from "../component/footer"; // ✅ import Footer
-// import contact from "../component/Contacts";
+// import Footer from "../component/footer";
+// import Banner from "../component/Banner";
+// import { useNavigate } from "react-router-dom";
+// import "./Home.css"
 
 // const Home = () => {
 //   const [data, setData] = useState([]);
+//   const navigate = useNavigate();
 
 //   useEffect(() => {
 //     const myFun = async () => {
-//       const res = await fetch('https://dummyjson.com/products/search?q=phone');
-//       const products = await res.json();
-//       setData(products.products);
+//       try {
+//         const res = await fetch("https://dummyjson.com/products?limit=8");
+//         const products = await res.json();
+//         setData(products.products);
+//       } catch (error) {
+//         console.error("Failed to fetch products:", error);
+//       }
 //     };
 //     myFun();
 //   }, []);
 
+//   const handleSub = (id) => {
+//     navigate(`/details-page/${id}`);
+//   };
+
 //   return (
 //     <>
 //       <Navbar />
+//       <Banner />
 
-//       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", padding: "20px" }}>
-//         {data.slice(0,5).map((item) => (
-//           <div
-//             key={item.id}
-//             style={{
-//               border: "1px solid #ccc",
-//               padding: "10px",
-//               width: "200px",
-//               borderRadius: "8px",
-//               boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
-//             }}
-//           >
-//             <img src={item.thumbnail} alt={item.title} width="100%" />
-//             <h3>{item.brand || item.title}</h3>
-//             <p>₹{item.price}</p>
-//             <p>{item.category}</p>
-//           </div>
-//         ))}
+//       {/* Breadcrumbs */}
+//       <div style={{ padding: "20px", color: "#888", fontSize: "14px" }}>
+//         <span style={{ color: "#f9a825", fontWeight: "bold" }}>All</span> / Bags & Backpacks / Decoration / Essentials / Interior
 //       </div>
 
-//       <Footer /> 
+//       {/* Product Grid */}
+//       <div
+//         style={{
+//           display: "grid",
+//           gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+//           gap: "30px",
+//           padding: "20px 40px",
+//           backgroundColor: "#f9f9f9",
+//         }}
+//       >
+//     {data.map((item) => (
+//   <div key={item.id} className="product-card">
+//     {/* Badges */}
+//     <div className="badges">
+//       <span className="badge new">New</span>
+//       {item.discountPercentage > 0 && (
+//         <span className="badge discount">-{Math.round(item.discountPercentage)}%</span>
+//       )}
+//     </div>
+
+//     {/* Image container */}
+//     <div className="image-container">
+//       <img src={item.thumbnail} alt={item.title} />
+//       <button
+//         className="add-to-cart-btn"
+//         onClick={() => handleSub(item.id)}
+//       >
+//         + Add to Cart
+//       </button>
+//     </div>
+
+//     {/* Title & Price */}
+//     <h3>{item.title}</h3>
+//     <p className="old-price">₹{Math.floor(item.price * 1.2)}</p>
+//     <p className="price">₹{item.price * 83}</p>
+
+//     {/* Color variants */}
+//     <div className="color-variants">
+//       <span className="color-dot black"></span>
+//       <span className="color-dot gray"></span>
+//       <span className="color-dot light-gray"></span>
+//     </div>
+//   </div>
+// ))}
+
+//       </div>
+
+//       <Footer />
 //     </>
 //   );
 // };
 
 // export default Home;
 
+
 import React, { useEffect, useState } from "react";
 import Navbar from "../component/Navbar";
-import Footer from "../component/footer"; 
-import contact from "../component/Contacts";
+import Footer from "../component/footer";
 import Banner from "../component/Banner";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const myFun = async () => {
-      const res = await fetch('https://dummyjson.com/products/search?q=phone');
-      const products = await res.json();
-      setData(products.products);
+      try {
+        
+        const urls = [
+          "https://dummyjson.com/products/category/smartphones",
+          "https://dummyjson.com/products/category/laptops",
+          "https://dummyjson.com/products/category/mens-shirts",
+          "https://dummyjson.com/products/category/sunglasses",
+          "https://dummyjson.com/products/category/home-decoration",
+          "https://dummyjson.com/products/category/kitchen-accessories",
+        ];
+
+        const responses = await Promise.all(urls.map((url) => fetch(url)));
+        const results = await Promise.all(responses.map((res) => res.json()));
+
+        // merge all categories
+        let combined = results.flatMap((r) => r.products);
+
+        // shuffle for mixed look
+        combined = combined.sort(() => Math.random() - 0.5);
+
+        setData(combined);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
     };
     myFun();
   }, []);
 
+  const handleSub = (id) => {
+    navigate(`/details-page/${id}`);
+  };
+
   return (
     <>
       <Navbar />
-      <Banner/>
+      <Banner />
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", padding: "20px", justifyContent: "center" }}>
-        {data.slice(0, 7).map((item) => (
-          <div
-            key={item.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "15px",
-              width: "250px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-              backgroundColor: "#fff",
-              transition: "transform 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <img src={item.thumbnail} alt={item.title} width="100%" style={{ borderRadius: "8px", height: "160px", objectFit: "cover" }} />
-            <h3 style={{ margin: "10px 0 5px" }}>{item.title}</h3>
-            <p style={{ margin: "5px 0", color: "#555" }}>{item.brand}</p>
-            <p style={{ fontWeight: "bold", fontSize: "18px" }}>₹{item.price}</p>
-            <p style={{ margin: "5px 0", color: "green" }}>Discount: {item.discountPercentage}%</p>
-            <p style={{ fontSize: "14px", color: "#888" }}>⭐ {item.rating} | Stock: {item.stock}</p>
-            <p style={{ fontSize: "13px", color: "#666", marginTop: "10px" }}>
-              {item.description.slice(0, 50)}...
-            </p>
-            <button style={{
-              marginTop: "10px",
-              padding: "8px 12px",
-              border: "none",
-              backgroundColor: "#007bff",
-              color: "white",
-              borderRadius: "5px",
-              cursor: "pointer"
-            }}>
-              Add to Cart
-            </button>
+      {/* Product Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gap: "30px",
+          padding: "20px 40px",
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        {data.map((item) => (
+          <div key={item.id} className="product-card">
+            {/* Badges */}
+            <div className="badges">
+              <span className="badge new">New</span>
+              {item.discountPercentage > 0 && (
+                <span className="badge discount">
+                  -{Math.round(item.discountPercentage)}%
+                </span>
+              )}
+            </div>
+
+            {/* Image container */}
+            <div className="image-container">
+              <img src={item.thumbnail} alt={item.title} />
+              <button
+                className="add-to-cart-btn"
+                onClick={() => handleSub(item.id)}
+              >
+                + Add to Cart
+              </button>
+            </div>
+
+            {/* Title & Price */}
+            <h3>{item.title}</h3>
+            <p className="old-price">₹{Math.floor(item.price * 1.2 * 83)}</p>
+            <p className="price">₹{item.price * 83}</p>
+
+            {/* Color variants */}
+            <div className="color-variants">
+              <span className="color-dot black"></span>
+              <span className="color-dot gray"></span>
+              <span className="color-dot light-gray"></span>
+            </div>
           </div>
         ))}
       </div>
-
-
-      
-
-
-
-
 
       <Footer />
     </>
@@ -122,4 +195,3 @@ const Home = () => {
 };
 
 export default Home;
-

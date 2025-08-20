@@ -1,37 +1,72 @@
-import React from "react";
-import img from "../assests/cccadcdf-c2b7-403a-9fbe-34c62edc24ea.jpg"
+import React from 'react';
+import heroImg from "../assests/banner.jpg"; 
 
 const Banner = () => {
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "300px",
-        background: "linear-gradient(to right, #0052D4, #4364F7, #6FB1FC)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-around",
-        padding: "40px",
-        color: "white",
-      }}
-    >
-      <div>
-        <h1 style={{ fontSize: "36px", marginBottom: "10px" }}>Electronics Sale</h1>
-        <p style={{ fontSize: "20px" }}>Top brands | Best Deals | Limited Time</p>
-        <p style={{ marginTop: "10px", fontSize: "16px" }}>
-          Hurry up! Offers starting from <b>₹499</b>
-        </p>
+    <section style={{ ...styles.hero, backgroundImage: `url(${heroImg})` }}>
+      <div style={styles.content}>
+        <h1 style={styles.title}></h1>
+        <p style={styles.subtitle}></p>
+        <button style={styles.button}>Interior</button>
       </div>
-      <img
-        src={img}
-        alt="Banner"
-        style={{ height: "200px", borderRadius: "10px", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}
-      />
-    </div>
+
+      <div style={styles.dots}>
+        <span style={{ ...styles.dot, backgroundColor: 'orange' }} />
+        <span style={styles.dot} />
+        <span style={styles.dot} />
+      </div>
+    </section>
   );
 };
 
+const styles = {
+  hero: {
+    height: '80vh',
+    backgroundSize: 'cover',
+    backgroundPosition: 'right',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 80px',
+    color: 'white',
+    position: 'relative',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    textAlign: 'left'
+  },
+  content: {
+    maxWidth: '600px',
+    alignSelf: 'flex-start'
+  },
+  title: {
+    fontSize: '48px',
+    margin: '0 0 20px 0'
+  },
+  subtitle: {
+    fontSize: '18px',
+    marginBottom: '30px'
+  },
+  button: {
+    backgroundColor: 'white',
+    color: '#000',
+    padding: '12px 20px',
+    borderRadius: '6px',
+    border: 'none',
+    cursor: 'pointer',
+    fontWeight: 'bold'
+  },
+  dots: {
+    position: 'absolute',
+    bottom: '20px',
+    left: '60px',
+    display: 'flex',
+    gap: '10px'
+  },
+  dot: {
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    backgroundColor: '#ccc'
+  }
+};
+
 export default Banner;
-
-
-

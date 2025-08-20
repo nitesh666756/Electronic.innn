@@ -1,0 +1,12 @@
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+.product-card:hover .hover-button {
+  transform: translateX(-50%) translateY(0%);
+  opacity: 1;
+}
